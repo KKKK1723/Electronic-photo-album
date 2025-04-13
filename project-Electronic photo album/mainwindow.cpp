@@ -1,11 +1,9 @@
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<QMenu>
 #include<QAction>
 #include<QDebug>
-#include <QMediaPlayer>
-#include<QAudioOutput>
+#include "wizard.h"
 #define endl Qt::endl
 
 MainWindow::MainWindow(QWidget *parent)
@@ -32,13 +30,13 @@ MainWindow::MainWindow(QWidget *parent)
     act_open_pro->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
     menu_file->addAction(act_open_pro);
 
-    
+
     //设置背景音乐
     QAction* act_music=new QAction(QIcon(":/music/bandicam 2025-04-13 14-51-23-941.mp3"),tr("背景音乐"),this);
     act_music->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     menu_set->addAction(act_music);
-    
-    
+
+
     //连接信号与槽  创建项目
     connect(act_creat_pro,&QAction::triggered,this,&MainWindow::SlotCreatePro);
 
@@ -54,7 +52,19 @@ MainWindow::~MainWindow()
 void MainWindow::SlotCreatePro(bool)
 {
     qDebug()<<"slot create pro triggered"<<endl;
-}
+    Wizard wizard(this);//构造函数 父窗口设置为mainwindow
+    wizard.setWindowTitle(tr("创建项目"));
+    auto *page=wizard.page(0);//第一页
+    page->setTitle(tr("创建项目配置"));
+    //连接信号与槽 把项目配置传回来todo
 
+    wizard.resize(500,300);
+    //展示
+    wizard.show();
+    wizard.exec();
+    //断开所有信号todo
+
+
+}
 
 
