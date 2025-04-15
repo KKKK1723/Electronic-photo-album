@@ -4,6 +4,7 @@
 #include<QAction>
 #include<QDebug>
 #include "wizard.h"
+#include "protree.h"
 #define endl Qt::endl
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,20 +20,20 @@ MainWindow::MainWindow(QWidget *parent)
     QMenu * menu_set=menuBar()->addMenu(tr("设置(&S)"));
 
     //新建
-    QAction *act_creat_pro=new QAction(QIcon(":/photo/7a96a759b1e628c15d2992e8da2bebf.jpg"),tr("创建项目"),this);
+    QAction *act_creat_pro=new QAction(QIcon(":/photo/7a96a759b1e628c15d2992e8da2bebf.jpg"),tr("创建相册"),this);
     //快捷键
     act_creat_pro->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     menu_file->addAction(act_creat_pro);
 
     //打开
-    QAction * act_open_pro=new QAction(QIcon(":/photo/e38198c26dc52b95a224af050b0951e.jpg"),tr("打开项目"),this);
+    QAction * act_open_pro=new QAction(QIcon(":/photo/e38198c26dc52b95a224af050b0951e.jpg"),tr("打开相册"),this);
     //快捷键
     act_open_pro->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
     menu_file->addAction(act_open_pro);
 
 
     //设置背景音乐
-    QAction* act_music=new QAction(QIcon(":/music/bandicam 2025-04-13 14-51-23-941.mp3"),tr("背景音乐"),this);
+    QAction* act_music=new QAction(QIcon(":/music/bandicam 2025-04-13 14-51-23-941.mp3"),tr("播放背景音乐"),this);
     act_music->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     menu_set->addAction(act_music);
 
@@ -41,7 +42,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(act_creat_pro,&QAction::triggered,this,&MainWindow::SlotCreatePro);
 
 
-
+    //加入目录树
+    _protree=new ProTree();
+    ui->proLayout->addWidget(_protree);
 }
 
 MainWindow::~MainWindow()
@@ -51,19 +54,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::SlotCreatePro(bool)
 {
-    qDebug()<<"slot create pro triggered"<<endl;
+    //qDebug()<<"slot create pro triggered"<<endl;
     Wizard wizard(this);//构造函数 父窗口设置为mainwindow
-    wizard.setWindowTitle(tr("创建项目"));
+    wizard.setWindowTitle(tr("创建相册"));
     auto *page=wizard.page(0);//第一页
-    page->setTitle(tr("创建项目配置"));
+    page->setTitle(tr("相册名称与存放路径"));
     //连接信号与槽 把项目配置传回来todo
-
-    wizard.resize(500,300);
+    connect(&wizard,&Wizard::SigProSettings,dynamic_cast<ProTree*>(_protree),&ProTree::AddProTree);
+    wizard.resize(600,400);
     //展示
     wizard.show();
     wizard.exec();
     //断开所有信号todo
-
+    disconnect();
 
 }
 
