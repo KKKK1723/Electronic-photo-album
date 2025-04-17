@@ -3,6 +3,8 @@
 
 #include <QTreeWidget>
 #include<QAction>
+#include<QProgressDialog>
+#include"protreethread.h"
 class ProTreeWidget : public QTreeWidget
 {
 public:
@@ -16,6 +18,8 @@ private:
     QAction * _action_setstart;
     QAction * _action_closerpro;//关闭
     QAction * _action_slideshow;//轮播图播放
+    QProgressDialog * _dialog_progress;//对话框
+    std::shared_ptr<ProTreeThread>_thread_create_p;
 
 private slots:
     void SlotItemPress(QTreeWidgetItem *item, int column);//点击时触发这个槽函数
