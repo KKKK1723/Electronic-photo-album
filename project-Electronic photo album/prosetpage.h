@@ -14,10 +14,13 @@ class ProSetPage : public QWizardPage
 public:
     explicit ProSetPage(QWidget *parent = nullptr);
     ~ProSetPage();
-
+    void GetProSettings(QString &name,QString &path);//将用户输入的姓名 路径返回
 
 protected:
     virtual bool isComplete() const;
+
+private slots:
+    void on_pushButton_clicked();
 
 private:
     Ui::ProSetPage *ui;
