@@ -25,7 +25,17 @@ void ProTreeThread::run()
     CreateProTree(_src_path,_dist_path,_parent_item,_file_count,_self,_root);
     if(_bstop)
     {
-
+        auto path=dynamic_cast<ProTreeItem*>(_root)->GetPath();//获取路径
+        
+        //树中删除
+        int dex=_self->indexOfTopLevelItem(_root);
+        delete _self->takeTopLevelItem(dex);
+        
+        //删除文件夹
+        QDir dir(path);
+        dir.removeRecursively();
+        return;
+        
     }
 
     emit SigFinishProgress(_file_count);
