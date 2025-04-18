@@ -25,13 +25,14 @@ private:
     //成员变量
     QString _src_path;//原地址
     QString _dist_path;//要复制到的地址
-    int _file_count;
+    int _file_count=0;
     QTreeWidgetItem* _parent_item;//父节点
-    QTreeWidget* _self;//当前节点
+    QTreeWidget* _self;//当前树
     QTreeWidgetItem* _root;
     bool _bstop;//控制线程退出
 
-
+public:
+    void SlotCanceled();
 signals:
     void SigUpdateProgress(int);//更新进度的信号
     void SigFinishProgress(int);//完成
