@@ -13,3 +13,37 @@ ProTreeItem:: ProTreeItem(QTreeWidgetItem* parent,const QString& name, const QSt
 {
 
 }
+
+//获取路径
+const QString &ProTreeItem::GetPath()
+{
+    return _path;
+}
+
+//获取根目录
+QTreeWidgetItem *  ProTreeItem::GetRoot()
+{
+    return _root;
+}
+
+//前向节点
+void ProTreeItem::SetPreItem(QTreeWidgetItem *item)
+{
+    _pre_item=item;
+}
+
+//后向节点
+void ProTreeItem::SetNextItem(QTreeWidgetItem *item)
+{
+    _next_item=item;
+}
+
+ProTreeItem *ProTreeItem::GetPreItem()
+{
+    return dynamic_cast<ProTreeItem*>(_pre_item);//从父类转为子类 QTreeWidgetItem * _pre_item;这个是QTreeWidgetItem，QTreeWidgetItem是ProTreeItem的基类
+}
+
+ProTreeItem *ProTreeItem::GetNextItem()
+{
+    return dynamic_cast<ProTreeItem*>(_next_item);//从父类转为子类
+}
