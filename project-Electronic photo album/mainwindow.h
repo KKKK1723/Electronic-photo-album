@@ -18,6 +18,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QWidget* _protree;//用基类! 降低类与类之间的耦合性 如果这里用protree类型，protree中也用到mainwindow 可能会引发互引用问题
 
 
 private slots:
