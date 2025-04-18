@@ -89,7 +89,10 @@ void ProTreeWidget::SlotImport()//菜单选项一  导入文件
     QString first_path=_list.at(0);
     int file_count=0;//记录文件中图片有多少个
 
-    _thread_create_p =std::make_shared<ProTreeThread>(std::ref(first_path),std::ref(file_log_path),_right_btn_item,file_count,this,_right_btn_item,nullptr);
+    _thread_create_p =std::make_shared<ProTreeThread>(std::ref(first_path),std::ref(file_log_path),
+                                                       _right_btn_item,file_count,this,_right_btn_item,nullptr);
+    
+    connect(_thread_create_p.get(),&ProTreeThread::SigUpdateProgress,this,&ProTreeWidget::SlotUpdateProgress);//连接的时候用裸指针
     _thread_create_p->start();
     //主页面创建一个模态对话框显示加载进度
     _dialog_progress=new QProgressDialog(this);
@@ -99,4 +102,26 @@ void ProTreeWidget::SlotImport()//菜单选项一  导入文件
     _dialog_progress->setRange(0,PROGRESS_WIDTH);
     _dialog_progress->exec();
 
+}
+
+//进度条更新
+void ProTreeWidget::SlotUpdateProgress(int count)
+{
+    if(!_dialog_progress)//未打开
+    {
+        return;
+    }
+    
+    if(count>=PROGRESS_MAX)
+    {
+        _dialog_progress->setValue(count%PROGRESS_MAX);
+    }
+    else
+    {
+        _dialog_progress->setValue(count);
+    }
+    
+    
+    
+    
 }
