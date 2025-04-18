@@ -2,6 +2,7 @@
 #include<QDir>
 #include "protreeitem.h"
 #include"const.h"
+#include<QDebug>
 ProTreeThread::ProTreeThread(const QString & src_path,
                              const QString& dist_path,
                              QTreeWidgetItem* parent_ite,
@@ -26,16 +27,16 @@ void ProTreeThread::run()
     if(_bstop)
     {
         auto path=dynamic_cast<ProTreeItem*>(_root)->GetPath();//获取路径
-        
+
         //树中删除
         int dex=_self->indexOfTopLevelItem(_root);
         delete _self->takeTopLevelItem(dex);
-        
+
         //删除文件夹
         QDir dir(path);
         dir.removeRecursively();
         return;
-        
+
     }
 
     emit SigFinishProgress(_file_count);
@@ -71,7 +72,8 @@ void ProTreeThread::CreateProTree(const QString &src_path, const QString &dist_p
         if(file_info.isDir())//是文件夹
         {
             file_count++;
-            emit SigUpdateProgress(_file_count);
+           // qDebug()<<"发送更新信号w"<<Qt::endl;
+            emit SigUpdateProgress(file_count);
 
             QDir dir_path(dist_path);
             QString t_path=dir_path.absoluteFilePath(file_info.fileName());
@@ -102,8 +104,9 @@ void ProTreeThread::CreateProTree(const QString &src_path, const QString &dist_p
                 continue;//不是图片
             }
 
-            _file_count++;
-            emit SigUpdateProgress(_file_count);
+            file_count++;
+          //  qDebug()<<"发送更新信号t"<<Qt::endl;
+            emit SigUpdateProgress(file_count);
 
             if(!needcopy)
             {
@@ -133,12 +136,15 @@ void ProTreeThread::CreateProTree(const QString &src_path, const QString &dist_p
 
             item->SetPreItem(preitem);
             preitem=item;
-
-
         }
     }
 
     parent_item->setExpanded(true);//可展开
+}
+
+void ProTreeThread::SlotCanceled()
+{
+   this->_bstop=true;
 }
 
 
