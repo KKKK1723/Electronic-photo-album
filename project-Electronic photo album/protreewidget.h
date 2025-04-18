@@ -7,6 +7,7 @@
 #include"protreethread.h"
 class ProTreeWidget : public QTreeWidget
 {
+    Q_OBJECT
 public:
     ProTreeWidget(QWidget *parent = nullptr);
     void AddProTree(const QString &name,const QString &path);
@@ -25,7 +26,11 @@ private slots:
     void SlotItemPress(QTreeWidgetItem *item, int column);//点击时触发这个槽函数
     void SlotImport();
     void SlotUpdateProgress(int count);
+    void SlotFinishProgress();
+    void SlotCanceled();
 
+signals:
+    void SigCanceled();//给线程发送取消信号
 
 };
 
