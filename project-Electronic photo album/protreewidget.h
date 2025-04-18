@@ -24,6 +24,7 @@ private:
 private slots:
     void SlotItemPress(QTreeWidgetItem *item, int column);//点击时触发这个槽函数
     void SlotImport();
+    void SlotUpdateProgress(int count);
 
 
 };
