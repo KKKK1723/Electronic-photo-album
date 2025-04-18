@@ -88,30 +88,41 @@ void ProTreeWidget::SlotImport()//菜单选项一  导入文件
 
     QString first_path=_list.at(0);
     int file_count=0;//记录文件中图片有多少个
+    //主页面创建一个模态对话框显示加载进度
+    _dialog_progress=new QProgressDialog(this);
+
 
     _thread_create_p =std::make_shared<ProTreeThread>(std::ref(first_path),std::ref(file_log_path),
                                                        _right_btn_item,file_count,this,_right_btn_item,nullptr);
-    
-    connect(_thread_create_p.get(),&ProTreeThread::SigUpdateProgress,this,&ProTreeWidget::SlotUpdateProgress);//连接的时候用裸指针
+
+     connect(_thread_create_p.get(),&ProTreeThread::SigUpdateProgress,this,&ProTreeWidget::SlotUpdateProgress);//连接的时候用裸指针
+
+     connect(_thread_create_p.get(),&ProTreeThread::SigFinishProgress,this,&ProTreeWidget::SlotFinishProgress);//完成关闭窗口
+
+     connect(_dialog_progress,&QProgressDialog::canceled,this,&ProTreeWidget::SlotCanceled);//点击取消按钮
+     connect(this,&ProTreeWidget::SigCanceled,_thread_create_p.get(),&ProTreeThread::SlotCanceled);//取消通知线程
+
+
     _thread_create_p->start();
-    //主页面创建一个模态对话框显示加载进度
-    _dialog_progress=new QProgressDialog(this);
+
     //给对话框初始化
     _dialog_progress->setWindowTitle(tr("Please wait..."));
     _dialog_progress->setFixedWidth(PROGRESS_WIDTH);
     _dialog_progress->setRange(0,PROGRESS_WIDTH);
-    _dialog_progress->exec();
+     _dialog_progress->exec();
+
 
 }
 
 //进度条更新
 void ProTreeWidget::SlotUpdateProgress(int count)
 {
+    //qDebug()<<"接收更新信号1"<<Qt::endl;
     if(!_dialog_progress)//未打开
     {
         return;
     }
-    
+    qDebug()<<count<<Qt::endl;
     if(count>=PROGRESS_MAX)
     {
         _dialog_progress->setValue(count%PROGRESS_MAX);
@@ -120,8 +131,20 @@ void ProTreeWidget::SlotUpdateProgress(int count)
     {
         _dialog_progress->setValue(count);
     }
-    
-    
-    
-    
 }
+
+//完成的时候关闭窗口就行
+void ProTreeWidget::SlotFinishProgress()
+{
+    _dialog_progress->setValue(PROGRESS_MAX);
+    _dialog_progress->deleteLater();
+}
+
+void ProTreeWidget::SlotCanceled()//通知线程取消
+{
+    emit SigCanceled();
+     delete _dialog_progress;
+     _dialog_progress=nullptr;
+}
+
+
