@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/">
+        <file>photo/1daeb62f494e3a0f040ea34c18cd41f.jpg</file>
+        <file>photo/2d584850f2d4aa853810142142e45bd.jpg</file>
+        <file>photo/4ddfd06bf5eafa97b60096a08b836d3.jpg</file>
+        <file>photo/7a96a759b1e628c15d2992e8da2bebf.jpg</file>
+        <file>photo/8ce90598bd8ddfdc3408f8781e6dd96.jpg</file>
+        <file>photo/8ced6d21cfaeff857d713fa5cbc2399.jpg</file>
+        <file>photo/78fc86cc2ad4b073aba60ed128552e4.jpg</file>
+        <file>photo/b96192c472f9bd0e7e9680d72ab7c46.jpg</file>
+        <file>photo/e2dc16a176e71e51bd89187c85b87e7.jpg</file>
+        <file>photo/e94dcc6cc2a06e03229c65a6d1a7e70.jpg</file>
+        <file>photo/e38198c26dc52b95a224af050b0951e.jpg</file>
+        <file>photo/f10e7d721918671061847808f9b1a5c.jpg</file>
+        <file>music/bandicam 2025-04-13 14-51-23-941.mp3</file>
+        <file>style/style.qss</file>
+        <file>photo/OIP.jpg</file>
+        <file>photo/OIP (1).jpg</file>
+        <file>photo/previous.png</file>
+        <file>photo/previous_hover.png</file>
+        <file>photo/previous_press.png</file>
+        <file>photo/next.png</file>
+        <file>photo/next_hover.png</file>
+        <file>photo/next_press.png</file>
+    </qresource>
+</RCC>
