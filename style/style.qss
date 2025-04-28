@@ -86,6 +86,44 @@ PicShow {
 
 
 
-#nextBtn,#previousBtn  {
+#nextBtn,#previousBtn,#closeBtn,#playBtn,#slidpreBtn,#slidnextBtn {
     border: 0px;
 }
+
+
+SlidShowDlg{
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+
+}
+
+#preListWidget{
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+    border:0px;
+}
+
+#preListWidget::item:hover{
+    background:rgb(38,95,153);
+}
+
+#preListWidget::item:selected{
+    background:rgb(38,95,153);
+}
+
+#slidprewid{
+    margin-left:10px;
+}
+
+#slidnext{
+    margin-right:10px;
+}
+
+#preListWidget::item:selected:active{
+    border:2px solid #ffffff;
+}
+
+#preListWidget::item:selected{
+    border:2px solid #ffffff;
+}
+
