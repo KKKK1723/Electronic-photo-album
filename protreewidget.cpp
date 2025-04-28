@@ -8,6 +8,7 @@
 #include"protreethread.h"
 #include<QDebug>
 #include"removeprodialog.h"
+#include"slidshowdlg.h"
 ProTreeWidget::ProTreeWidget(QWidget *parent):_active_item(nullptr),_right_btn_item(nullptr),_dialog_progress(nullptr),_selected_item(nullptr),
     _thread_create_p(nullptr),_thread_open_p(nullptr),_dialog_progress2(nullptr)
 {
@@ -23,6 +24,8 @@ ProTreeWidget::ProTreeWidget(QWidget *parent):_active_item(nullptr),_right_btn_i
     connect(_action_closerpro,&QAction::triggered,this,&ProTreeWidget::Slotcloserpro);//点击删除相册后执行Slotcloserpro函数
 
     connect(this,&ProTreeWidget::itemDoubleClicked,this,&ProTreeWidget::SlotDoubleClickItem);
+
+    connect(_action_slideshow,&QAction::triggered,this,&ProTreeWidget::SlotSlidShow);
 
 }
 
@@ -276,6 +279,29 @@ void ProTreeWidget::SlotCanceled_open()
     emit SigCanceled_open();
     delete _dialog_progress2;
     _dialog_progress2=nullptr;
+}
+
+void ProTreeWidget::SlotSlidShow()
+{
+    if(!_right_btn_item)
+    {
+        return;
+    }
+
+    auto *now=dynamic_cast<ProTreeItem*>(_right_btn_item);
+
+    auto *first_child_item=now->GetFirstPicChild();
+    auto *last_child_item=now->GetLastPicChild();
+    if(!first_child_item||!last_child_item)return;
+
+    qDebug()<<"first"<<first_child_item->GetPath();
+     qDebug()<<"last"<<last_child_item->GetPath();
+    _slide_show_dlg=std::make_shared<SlidShowDlg>(this,first_child_item,last_child_item);
+
+    _slide_show_dlg->setModal(true);//模态
+    _slide_show_dlg->showMaximized();
+
+
 }
 
 void ProTreeWidget::SlotOpenPro(const QString &path)//打开相册
