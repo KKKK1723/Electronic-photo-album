@@ -5,6 +5,7 @@
 #include<QTreeWidgetItem>
 class PreListWid : public QListWidget
 {
+    Q_OBJECT
 public:
     PreListWid(QWidget *parent = nullptr);
     ~PreListWid();
@@ -18,7 +19,9 @@ private:
 public slots:
     void SlotUpPreList(QTreeWidgetItem* tree_item);
     void SlotUpSelect(QTreeWidgetItem* tree_item);
-
+    void SlotItemPressed(QListWidgetItem* item);
+signals:
+    void SigUpSelectShow(QString path);
 };
 
 #endif // PRELISTWID_H
