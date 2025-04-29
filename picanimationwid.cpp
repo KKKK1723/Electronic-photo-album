@@ -11,7 +11,7 @@ PicAnimationWid::PicAnimationWid(QWidget *parent)
 
 PicAnimationWid::~PicAnimationWid()
 {
-
+    _timer->stop();
 }
 
 void PicAnimationWid::SetPixmap(QTreeWidgetItem *item)
