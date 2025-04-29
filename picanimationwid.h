@@ -13,6 +13,9 @@ public:
     void Start();
     void Stop();
 
+    void SlidNext();
+    void Slidpre();
+
 protected:
     virtual void paintEvent(QPaintEvent *event);//重绘
 
@@ -20,6 +23,7 @@ protected:
 
 
 private:
+    void UpSelectPixmap(QTreeWidgetItem* item);
     float _factor;
     QTimer* _timer;
     QPixmap _pixmap1;
@@ -33,6 +37,14 @@ private slots:
 signals:
     void SigUpPreList(QTreeWidgetItem*);
     void SigSelectItem(QTreeWidgetItem*);
+    void SigStart();
+    void SigStop();
+    void SigStartMusic();
+    void SigStopMusic();
+
+public slots:
+    void SlotUpSelectShow(QString path );
+    void SlotStartOrStop();
 };
 
 #endif // PICANIMATIONWID_H
