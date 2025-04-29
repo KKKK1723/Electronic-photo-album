@@ -9,8 +9,9 @@
 #include<QDebug>
 #include"removeprodialog.h"
 #include"slidshowdlg.h"
+
 ProTreeWidget::ProTreeWidget(QWidget *parent):_active_item(nullptr),_right_btn_item(nullptr),_dialog_progress(nullptr),_selected_item(nullptr),
-    _thread_create_p(nullptr),_thread_open_p(nullptr),_dialog_progress2(nullptr)
+    _thread_create_p(nullptr),_thread_open_p(nullptr),_dialog_progress2(nullptr),_currentIndex(0),isempty_list(false)
 {
     this->setHeaderHidden(true);//把数字隐藏掉
     connect(this,&ProTreeWidget::itemPressed,this,&ProTreeWidget::SlotItemPress);//右键根目录打开菜单
@@ -26,6 +27,10 @@ ProTreeWidget::ProTreeWidget(QWidget *parent):_active_item(nullptr),_right_btn_i
     connect(this,&ProTreeWidget::itemDoubleClicked,this,&ProTreeWidget::SlotDoubleClickItem);
 
     connect(_action_slideshow,&QAction::triggered,this,&ProTreeWidget::SlotSlidShow);
+
+    _player=new QMediaPlayer(this);
+    audio_output=new QAudioOutput(this);
+    _player->setAudioOutput(audio_output);
 
 }
 
@@ -304,6 +309,49 @@ void ProTreeWidget::SlotSlidShow()
 
 }
 
+QString ProTreeWidget::GetMusicUrl()
+{
+    if(_playlist.isEmpty())
+    {
+        isempty_list=true;
+        qDebug()<<"音频为空直接退出";
+        return "";
+    }
+    qDebug() << "Calling GetMusicUrl()";
+    if(_currentIndex>=_playlist.size())
+    {
+        _currentIndex=0;
+    }
+
+    QString tmp=_playlist[_currentIndex];
+    _currentIndex++;
+    qDebug()<<"返回音频地址"<<tmp;
+    qDebug()<<"_currentIndex="<<_currentIndex;
+    return tmp;
+}
+
+void ProTreeWidget::SlotStartMusic()
+{
+    //qDebug()<<"此时音频有几个 "<<_playlist.size();
+     if(!isempty_list)
+     {
+        qDebug()<<"开始播放";
+        //_player->
+        _player->play();
+        qDebug()<<"播放器状态"<<_player->mediaStatus();
+    }
+
+}
+
+void ProTreeWidget::SlotStopMusic()
+{
+    if(!isempty_list)
+    {
+        _player->pause();
+    }
+
+}
+
 void ProTreeWidget::SlotOpenPro(const QString &path)//打开相册
 {
     if(_set_path.find(path)!=_set_path.end())
@@ -371,6 +419,37 @@ void ProTreeWidget::SlotNextShow()
     emit SigUpdatePic_next(curItem->GetPath());
     _selected_item=curItem;
     this->setCurrentItem(curItem);
+}
+
+void ProTreeWidget::SlotSetMusic()
+{
+    QFileDialog file_dialog;
+    file_dialog.setFileMode(QFileDialog::ExistingFiles);
+    file_dialog.setWindowTitle(tr("选择音频文件"));
+    file_dialog.setDirectory(QDir::currentPath());
+    file_dialog.setViewMode(QFileDialog::Detail);
+    file_dialog.setNameFilter("(*.mp3)");
+
+    QStringList p;
+    if(file_dialog.exec())
+    {
+        p=file_dialog.selectedFiles();
+    }
+    qDebug()<<"1";
+    qDebug()<<"音频长度为"<<p.size();
+    for(auto i:p)
+    {
+        _playlist.append(i);
+    }
+
+    if(_player->mediaStatus()!=QMediaPlayer::PlayingState)
+    {
+        _currentIndex=0;
+    }
+    qDebug()<<"SlotSetMusic end()";
+    _player->setSource(QUrl::fromLocalFile(GetMusicUrl()));
+    //_player->setSource(QUrl("qrc:/music/aaa.mp3"));
+    SlotStartMusic();
 }
 
 
