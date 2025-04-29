@@ -53,16 +53,46 @@ void PicAnimationWid::SetPixmap(QTreeWidgetItem *item)
 
 void PicAnimationWid::Start()
 {
-     _factor=0;
+    emit SigStart();
+    emit SigStart();
+    _factor=0;
     _timer->start(15);
     _b_start=true;
 }
 
 void PicAnimationWid::Stop()//停止动画
 {
+    emit SigStop();
+    emit SigStop();
     _timer->stop();
     _factor=0;
     _b_start=false;
+}
+
+void PicAnimationWid::SlidNext()
+{
+    Stop();
+    if(!_cur_item)return;
+
+    auto * cur_item=dynamic_cast<ProTreeItem*>(_cur_item);
+    auto * next_item=cur_item->GetNextItem();
+    if(!next_item)return;
+
+    SetPixmap(next_item);
+    update();
+}
+
+void PicAnimationWid::Slidpre()
+{
+    Stop();
+    if(!_cur_item)return;
+
+    auto * cur_item=dynamic_cast<ProTreeItem*>(_cur_item);
+    auto * pre_item=cur_item->GetPreItem();
+    if(!pre_item)return;
+
+    SetPixmap(pre_item);
+    update();
 }
 
 void PicAnimationWid::paintEvent(QPaintEvent *event)
@@ -118,6 +148,31 @@ void PicAnimationWid::paintEvent(QPaintEvent *event)
     painter.drawPixmap(x, y, alphaPixmap2);
 }
 
+void PicAnimationWid::UpSelectPixmap(QTreeWidgetItem *item)
+{
+    if(!item)return;
+
+    auto * tree_item=dynamic_cast<ProTreeItem*>(item);
+    auto path=tree_item->GetPath();
+    _pixmap1.load(path);
+    _cur_item=tree_item;
+
+    if(_map_items.find(path)==_map_items.end())
+    {
+        _map_items[path]=tree_item;
+    }
+
+    auto* next_item=tree_item->GetNextItem();
+    if(!next_item)return;
+
+     auto next_path=tree_item->GetPath();
+    _pixmap2.load(next_path);
+     if(_map_items.find(next_path)==_map_items.end())
+     {
+         _map_items[next_path]=next_item;
+     }
+}
+
 void PicAnimationWid::TimeOut()
 {
     if(!_cur_item)
@@ -145,4 +200,33 @@ void PicAnimationWid::TimeOut()
     }
 
     update();
+}
+
+void PicAnimationWid::SlotUpSelectShow(QString path)
+{
+    auto it=_map_items.find(path);
+    if(it==_map_items.end())return;
+
+    UpSelectPixmap(it.value());
+    update();
+}
+
+void PicAnimationWid::SlotStartOrStop()
+{
+    //不是开始状态
+    if(!_b_start)
+    {
+        _factor=0;
+        _timer->start();
+        _b_start=true;
+        emit SigStartMusic();
+    }
+    else//此时是开始
+    {
+        _timer->stop();
+        _factor=0;
+        update();
+        _b_start=false;
+        emit SigStopMusic();
+    }
 }
