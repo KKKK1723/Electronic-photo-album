@@ -70,11 +70,7 @@
 
 ---
 
-## 🖼️ 截图预览（建议上传配图）
 
-![初始界面](https://github.com/KKKK1723/Electronic-photo-album/blob/main/photo/761f5105b35e0e9ddb45b08c8f94e78.png)
-
----
 
 ## 🚀 项目运行
 
