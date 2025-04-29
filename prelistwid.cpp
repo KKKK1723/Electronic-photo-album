@@ -3,11 +3,13 @@
 #include"const.h"
 #include<QPainter>
 #include"prelistitem.h"
+#include<QGuiApplication>
 PreListWid::PreListWid(QWidget *parent):_global(0),QListWidget(parent),last_index(17) {
 
     this->setViewMode(QListWidget::IconMode);
     this->setIconSize(QSize(90,90));
     this->setSpacing(5);//间隔
+    connect(this,&PreListWid::itemPressed,this,&PreListWid::SlotItemPressed);
 }
 
 PreListWid::~PreListWid()
@@ -90,4 +92,19 @@ void PreListWid::SlotUpSelect(QTreeWidgetItem *tree_item)
     }
 
     this->setCurrentItem(it.value());
+}
+
+void PreListWid::SlotItemPressed(QListWidgetItem *item)
+{
+    if(QGuiApplication::mouseButtons()!=Qt::LeftButton)return;
+
+    auto * list_item=dynamic_cast<PreListItem*>(item);
+    auto cur_index=list_item->GetIndex();
+    auto cur_path=list_item->GetPath();
+
+    // auto it=_set_items.find(cur_path);
+    // if(it==_set_items.end())return;
+
+    this->setCurrentItem(item);
+    emit SigUpSelectShow(cur_path);
 }
