@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     w.setWindowTitle("电子相册");
-    //w.setWindowIcon(QIcon(":/photo/e2dc16a176e71e51bd89187c85b87e7.jpg"));
+    w.setWindowIcon(QIcon(":/photo/test/R.jpg"));
     w.showMaximized();//最大化显示
     //w.show();
     return a.exec();
