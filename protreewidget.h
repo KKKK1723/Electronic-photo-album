@@ -6,8 +6,9 @@
 #include<QProgressDialog>
 #include"protreethread.h"
 #include"opentreethread.h"
-
-
+#include <QtMultimedia/QMediaPlayer>
+#include<QAudioOutput>
+//#include<QtMultimedia/QMediaPlaylist>
 class SlidShowDlg;//声明一下  防止互相引用
 
 class ProTreeWidget : public QTreeWidget
@@ -32,6 +33,14 @@ private:
     std::shared_ptr<OpenTreeThread>_thread_open_p;
     std::shared_ptr<SlidShowDlg>_slide_show_dlg;
 
+    //播放列表
+    QMediaPlayer *_player;
+    QStringList _playlist;
+    int _currentIndex;//放到第几个
+    bool isempty_list;//容器里面是否为空
+    QAudioOutput *audio_output=nullptr;
+   // QMediaPlaylist *_playlist;
+
 private slots:
     void SlotItemPress(QTreeWidgetItem *item, int column);//点击时触发这个槽函数
     void SlotDoubleClickItem(QTreeWidgetItem* doubleitem,int col);
@@ -48,6 +57,9 @@ private slots:
 
     void SlotSlidShow();
 
+    QString GetMusicUrl();
+
+
 
 
 public slots:
@@ -55,6 +67,11 @@ public slots:
 
     void SlotPreviousShow();
     void SlotNextShow();
+
+    void SlotSetMusic();
+
+    void SlotStartMusic();
+    void SlotStopMusic();
 
 signals:
     void SigCanceled();//给线程发送取消信号
