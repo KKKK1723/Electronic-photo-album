@@ -1,5 +1,7 @@
 QT       += core gui
-QT += core gui multimedia
+#QT += core gui multimedia
+QT +=multimedia
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
@@ -14,14 +16,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     opentreethread.cpp \
+    picanimationwid.cpp \
     picbutton.cpp \
     picshow.cpp \
+    picstatebtn.cpp \
+    prelistitem.cpp \
+    prelistwid.cpp \
     prosetpage.cpp \
     protree.cpp \
     protreeitem.cpp \
     protreethread.cpp \
     protreewidget.cpp \
     removeprodialog.cpp \
+    slidshowdlg.cpp \
     wizard.cpp \
     wizard.cpp
 
@@ -30,14 +37,19 @@ HEADERS += \
     const.h \
     mainwindow.h \
     opentreethread.h \
+    picanimationwid.h \
     picbutton.h \
     picshow.h \
+    picstatebtn.h \
+    prelistitem.h \
+    prelistwid.h \
     prosetpage.h \
     protree.h \
     protreeitem.h \
     protreethread.h \
     protreewidget.h \
     removeprodialog.h \
+    slidshowdlg.h \
     wizard.h \
     wizard.h
 
@@ -48,6 +60,7 @@ FORMS += \
     prosetpage.ui \
     protree.ui \
     removeprodialog.ui \
+    slidshowdlg.ui \
     wizard.ui \
     wizard.ui
 
@@ -61,4 +74,10 @@ RESOURCES += \
 
 
 //RC_ICONS = "icon/bulm.ioc"
+
+DISTFILES += \
+    photo/pause_hover.png \
+    photo/pause_press.png \
+    photo/play_hover.png \
+    photo/play_press.png
 
