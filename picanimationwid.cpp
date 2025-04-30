@@ -54,7 +54,7 @@ void PicAnimationWid::SetPixmap(QTreeWidgetItem *item)
 void PicAnimationWid::Start()
 {
     emit SigStart();
-    emit SigStart();
+    emit SigStartMusic();
     _factor=0;
     _timer->start(15);
     _b_start=true;
@@ -63,7 +63,7 @@ void PicAnimationWid::Start()
 void PicAnimationWid::Stop()//停止动画
 {
     emit SigStop();
-    emit SigStop();
+    emit SigStopMusic();
     _timer->stop();
     _factor=0;
     _b_start=false;
